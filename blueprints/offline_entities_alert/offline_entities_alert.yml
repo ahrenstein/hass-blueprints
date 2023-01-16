@@ -1,0 +1,69 @@
+#
+# Hass Blueprint:: offline_entities_alert.yml
+#
+# Linter:: yaml-lint
+#
+# Copyright 2023, Matthew Ahrenstein, All Rights Reserved.
+#
+# Maintainers:
+# - Matthew Ahrenstein: matt@ahrenstein.com
+#
+# See LICENSE
+#
+blueprint:
+  name: Offline Entities Alert
+  description:  Test the status of all entities every half hour and report unavailable ones.
+  domain: automation
+  source_url: https://github.com/ahrenstein/hass-blueprints/blob/main/blueprints/offline_entities_alert/offline_entities_alert.yml
+  # Inputs used to determine the trigger
+  input:
+    exclude:
+      name: Excluded Entities
+      description: 'Exclude entities that you expect to lose connectivity, like smart phones. (Areas and devices not supported)'
+      default: {}
+      selector:
+        target:
+    actions:
+      name: Actions
+      description: Notifications or similar to be run. {{entities}} is replaced with the names of unavailable entities.
+      selector:
+        action:
+
+# Variables used in the automation
+variables:
+  exclude: !input 'exclude'
+  entities: >-
+    {% set result = namespace(entities=[]) %}
+    {% for state in states %}
+      {% if exclude.entity_id is defined %}
+        {% if state.state == 'unavailable' and not state.entity_id in exclude.entity_id %}
+          {% set result.entities = result.entities + [state.name] %}
+        {% endif %}
+      {% else %}
+        {% if state.state == 'unavailable' %}
+          {% set result.entities = result.entities + [state.name] %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    {{"⤵ \n- "}}{{result.entities|join('\n- ')}}
+
+# Events that trigger the automation.
+# In this case we just use cron
+trigger:
+  - platform: time_pattern
+    minutes: "/30"
+
+# Conditions that determine if the automation should run after trigger
+condition:
+  # Make sure entities list isn't empty
+  - condition: template
+    value_template: >-
+        {{ entities != "⤵ \n-"}}
+
+# The actions we are taking
+action:
+  - choose: []
+    default: !input 'actions'
+
+mode: single
+max_exceeded: silent
