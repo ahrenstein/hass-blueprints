@@ -8,6 +8,7 @@ Blueprints In Repo
 Currently, the following blueprints are in the repo:
 
 1. [Offline Entities Alert](blueprints/offline_entities_alert) - Alert when any entity goes offline
+2. [Grid Undervolted Alert](blueprints/grid_undervolted_alert) - Alert when a Tesla Wall Connector detects low voltage from the power grid.
 
 pre-commit
 ----------
