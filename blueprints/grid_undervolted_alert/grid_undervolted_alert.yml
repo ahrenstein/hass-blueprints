@@ -17,37 +17,49 @@ blueprint:
   source_url: https://github.com/ahrenstein/hass-blueprints/blob/main/blueprints/grid_undervolted_alert/grid_undervolted_alert.yml
   # Inputs used to determine the trigger
   input:
+    tesla_sensor:
+      name: Tesla Grid Voltage Sensor
+      description: The Grid Voltage sensor from a Tesla Wall Connector
+      selector:
+        entity:
+          domain: sensor
     sns_topic:
       name: AWS SNS Topic
-      description: 'An AWS SNS Topic to receive alerts when the grid is undervolted.'
+      description: An AWS SNS Topic to receive alerts when the grid is undervolted.
       selector:
-        target:
+        text:
     undervoltage:
       name: Undervoltage threshold
       description: Voltage BELOW this number will trigger an alert
       selector:
-        action:
+        number:
+          mode: box
+
+
+variables:
+  tesla_sensor: !input tesla_sensor
+  sns_topic: !input sns_topic
+  undervoltage: !input undervoltage
+mode: single
+max_exceeded: silent
 
 # Events that trigger the automation.
 # In this case we just use cron
 trigger:
   - platform: numeric_state
-      entity_id: sensor.tesla_wall_connector_grid_voltage
-      for:
-        hours: 0
-        minutes: 0
-        seconds: 2
-      below: {{ undervoltage }}
+    entity_id: !input tesla_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 2
+    below: !input undervoltage
 
 # The actions we are taking
 action:
   - service: notify.sns_important_alerts
     data:
-      target: {{ sns_topic }}
+      target: !input sns_topic
       title: Grid Power Undervolted
       message: >-
         The Tesla Charger is detecting an undervolted power grid. Expect power
         flickering due to a voltage level below {{ undervoltage }}
-
-mode: single
-max_exceeded: silent
