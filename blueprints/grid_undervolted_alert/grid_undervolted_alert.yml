@@ -16,17 +16,17 @@ blueprint:
   domain: automation
   source_url: https://github.com/ahrenstein/hass-blueprints/blob/main/blueprints/grid_undervolted_alert/grid_undervolted_alert.yml
   # Inputs used to determine the trigger
-    input:
-      sns_topic:
-        name: AWS SNS Topic
-        description: 'An AWS SNS Topic to receive alerts when the grid is undervolted.'
-        selector:
-          target:
-      undervoltage:
-        name: Undervoltage threshold
-        description: Voltage BELOW this number will trigger an alert
-        selector:
-          action:
+  input:
+    sns_topic:
+      name: AWS SNS Topic
+      description: 'An AWS SNS Topic to receive alerts when the grid is undervolted.'
+      selector:
+        target:
+    undervoltage:
+      name: Undervoltage threshold
+      description: Voltage BELOW this number will trigger an alert
+      selector:
+        action:
 
 # Events that trigger the automation.
 # In this case we just use cron
