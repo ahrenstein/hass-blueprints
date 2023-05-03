@@ -16,3 +16,5 @@ This repo uses Yelp's [pre-commit](https://pre-commit.com/) to manage some pre-c
 In order to use the hooks, make sure you have `pre-commit` in your `$PATH`.  
 Once in your path you should run `pre-commit install` in order to configure it. If you push commits that fail pre-commit, your PR will
 not pass tests.
+alias: Log Grid Undervoltage To Google Sheet
+description: Log Grid Undervolting to Hass Power Grid Statistics Google Sheet

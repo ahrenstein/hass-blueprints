@@ -12,7 +12,7 @@
 #
 blueprint:
   name: Grid Undervolted Logging
-  description:  If a Tesla charger is detecting lower than expected voltage, log the current voltage to a Google Sheet.
+  description:  If a commonly named Tesla charger is detecting lower than expected voltage, log the current voltage to a Google Sheet.
   domain: automation
   source_url: https://github.com/ahrenstein/hass-blueprints/blob/main/blueprints/grid_undervolted_alert/grid_undervolted_alert.yml
   # Inputs used to determine the trigger
@@ -67,4 +67,4 @@ action:
       data:
         created: "{{ now().strftime('%m/%d/%Y %H:%M:%S') }}"
         Current Voltage: "{{ states(tesla_voltage)|float(0) }}"
-        Reporter: "{{ tesla_sensor }}"
+        Reporter: !input tesla_sensor
