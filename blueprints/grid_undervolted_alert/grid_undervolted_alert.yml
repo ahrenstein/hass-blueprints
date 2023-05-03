@@ -56,6 +56,6 @@ action:
     data:
       config_entry: !input google_sheet
       data:
-        Date/Time: "{{ now().strftime('%m/%d/%Y %H:%M:%S') }}"
+        created: "{{ now().strftime('%m/%d/%Y %H:%M:%S') }}"
         Current Voltage: "{{ states('sensor.tesla_wall_connector_grid_voltage')|float(0) }}"
         Reporter: sensor.tesla_wall_connector_grid_voltage
