@@ -67,4 +67,4 @@ action:
       data:
         created: "{{ now().strftime('%m/%d/%Y %H:%M:%S') }}"
         Current Voltage: "{{ states(tesla_voltage)|float(0) }}"
-        Reporter: "{{ tesla_sensor }}"
+        Reporter: !input tesla_sensor
